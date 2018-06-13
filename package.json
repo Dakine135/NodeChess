@@ -1,0 +1,25 @@
+{
+  "name": "nodechess",
+  "version": "1.0.0",
+  "description": "Multiplayer Chess with Node and Canvas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dakine135/NodeChess.git"
+  },
+  "author": "Brandon Ryder and Dustin Welborn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dakine135/NodeChess/issues"
+  },
+  "homepage": "https://github.com/Dakine135/NodeChess#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.17.5"
+  }
+}

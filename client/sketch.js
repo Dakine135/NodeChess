@@ -60,10 +60,19 @@ function setup(){
 
 }
 
+//triggers in frame mouse was pressed
 function mousePressed() {
+
   allPieces.forEach((piece)=>{
-    piece.clicked();
+    if(piece.clicked()){
+      console.log("Piece that was clicked:", piece);
+    }
   });
+}
+
+//triggers when you let go of mouse
+function mouseReleased() {
+
 }
 
 function keyPressed(){
@@ -73,6 +82,12 @@ function keyPressed(){
 //runs every frame
 function draw(){
   drawBackground();
+
+  if (mouseIsPressed === true) {
+    //see exmaple
+    //https://p5js.org/examples/drawing-continous-lines.html
+    //and reference Event -> Mouse section
+  }
 
   // image(chessSprite, 200, 300);
   allPieces.forEach((piece)=>{

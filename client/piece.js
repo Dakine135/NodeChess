@@ -65,7 +65,9 @@ function Piece(x, y, type) {
        mouseY > this.y && mouseY < this.y + this.size
     ){
          console.log("Clicked on ",this.type," at ",this.x,",",this.y);
-       }
+         return true;
+    }
+    return false;
   }
 
   this.draw = function() {

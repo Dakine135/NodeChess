@@ -25,15 +25,28 @@ function drawBackground() {
 function setup(){
   createCanvas(1101,801);
   allPieces = new allPieces();
+  allPieces.newGame();
 }
 
 //triggers in frame mouse was pressed
 function mousePressed() {
     currPiece = allPieces.getClicked();
+    if(currPiece.count > 1){
+      //create new piece with unique id at cursor
+      var newId = currPiece.id;
+      while(allPieces.getById(newId) != null){
+        newId = newId + "#";
+      }
+      currPiece.count--;
+      currPiece = new Piece(newId, currPiece.x, currPiece.y, currPiece.type, 1);
+      allPieces.boardPieces.push(currPiece);
+    } // end create new Piece at cursor
     console.log("Piece that was clicked:", currPiece);
 
     //create shadowCopy that snaps to slots
-    shadowPiece = new Piece(currPiece.x, currPiece.y, currPiece.type, 1, true);
+    if(currPiece != null){
+      shadowPiece = new Piece("Shadow "+currPiece.id, currPiece.x, currPiece.y, currPiece.type, 1, true);
+    }
 }
 
 //triggers when you let go of mouse
@@ -48,7 +61,9 @@ function mouseReleased() {
     currPiece.x = Math.floor(mouseX - diffX);
     currPiece.y = Math.floor(mouseY - diffY);
     allPieces.take(currPiece);
+    allPieces.stack(currPiece);
     currPiece = null;
+    shadowPiece = null;
   }
 
 }

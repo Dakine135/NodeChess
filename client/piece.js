@@ -1,4 +1,5 @@
-function Piece(x, y, type, count, shadowCopy) {
+function Piece(id, x, y, type, count, shadowCopy) {
+  this.id = id;
   this.x = x;
   this.y = y;
   this.type = type;
@@ -6,7 +7,7 @@ function Piece(x, y, type, count, shadowCopy) {
   this.count = count;
   this.shadowCopy = shadowCopy | false;
 
-
+  var pixelsToShift = 6;
 
   //for sprite
   this.spriteSize = 64;
@@ -60,6 +61,10 @@ function Piece(x, y, type, count, shadowCopy) {
       this.spriteY = 65;
       break;
 
+  } //sprite switch
+
+  this.side = function(){
+    return this.id.substring(0,5);
   }
 
   this.clicked = function(){
@@ -74,13 +79,16 @@ function Piece(x, y, type, count, shadowCopy) {
 
   this.draw = function() {
     if(this.shadowCopy){
-      console.log("draw shadow");
       tint(255, 50);
-      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,(this.x),(this.y),this.size/2,this.size/2);
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size/2,this.size/2);
     } else{
-      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size,this.size);
+      var minSpread = 0 - Math.floor(this.count/2);
+      var maxSpread = 0 + Math.ceil(this.count/2);
+      // console.log(minSpread, " => ", maxSpread, "   Count: ", this.count);
+      for(var i = minSpread; i<maxSpread; i++){
+        copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x+(pixelsToShift*i),this.y,this.size,this.size);
+      }
     }
-
 
   }
 }

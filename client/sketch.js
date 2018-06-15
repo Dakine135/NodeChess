@@ -1,5 +1,6 @@
 var chessSprite;
 var allPieces;
+var currPiece = null;
 
 function preload() {
   chessSprite = loadImage('Images/3ZTI1.png');
@@ -21,57 +22,36 @@ function drawBackground() {
 
 //runs once at the beggining
 function setup(){
-  createCanvas(801,801);
-
-    //setup all the pieces
-     allPieces = [
-       new Piece(0,0,"whiteRook"),
-       new Piece(100,0,"whiteKnight"),
-       new Piece(200,0,"whiteBishop"),
-       new Piece(300,0,"whiteKing"),
-       new Piece(400,0,"whiteQueen"),
-       new Piece(500,0,"whiteBishop"),
-       new Piece(600,0,"whiteKnight"),
-       new Piece(700,0,"whiteRook"),
-
-       new Piece(0,700,"blackRook"),
-       new Piece(100,700,"blackKnight"),
-       new Piece(200,700,"blackBishop"),
-       new Piece(300,700,"blackKing"),
-       new Piece(400,700,"blackQueen"),
-       new Piece(500,700,"blackBishop"),
-       new Piece(600,700,"blackKnight"),
-       new Piece(700,700,"blackRook"),
-     ];
-
-     //add Pawns
-     for (var i=0; i<8; i++){
-       allPieces.push(
-         new Piece(100*i,100,"whitePawn")
-       );
-       allPieces.push(
-         new Piece(100*i,600,"blackPawn")
-       );
-     }
-
-
-
-
-
+  createCanvas(1101,801);
+  allPieces = new allPieces();
 }
 
 //triggers in frame mouse was pressed
 function mousePressed() {
-
-  allPieces.forEach((piece)=>{
-    if(piece.clicked()){
-      console.log("Piece that was clicked:", piece);
-    }
-  });
+    currPiece = allPieces.getClicked();
+    console.log("Piece that was clicked:", currPiece);
 }
 
 //triggers when you let go of mouse
 function mouseReleased() {
+
+  if(currPiece != null){
+    console.log("mouseReleased Before: ", currPiece);
+    console.log("Mouse: ", mouseX, mouseY);
+    let diffX = mouseX % 100;
+    let diffY = mouseY % 100;
+    console.log("Diff: ", diffX, diffY);
+    currPiece.x = Math.floor(mouseX - diffX);
+    currPiece.y = Math.floor(mouseY - diffY);
+    allPieces.take(currPiece);
+
+    console.log("mouseReleased: ", currPiece);
+
+
+
+
+    currPiece = null;
+  }
 
 }
 
@@ -83,15 +63,12 @@ function keyPressed(){
 function draw(){
   drawBackground();
 
-  if (mouseIsPressed === true) {
+  if (mouseIsPressed === true && currPiece != null) {
     //see exmaple
     //https://p5js.org/examples/drawing-continous-lines.html
+    currPiece.x = Math.floor(mouseX - 32);
+    currPiece.y = Math.floor(mouseY - 32);
     //and reference Event -> Mouse section
   }
-
-  // image(chessSprite, 200, 300);
-  allPieces.forEach((piece)=>{
-    piece.draw();
-  });
-
+  allPieces.draw();
 } //draw

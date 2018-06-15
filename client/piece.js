@@ -1,8 +1,9 @@
-function Piece(x, y, type) {
+function Piece(x, y, type, count) {
   this.x = x;
   this.y = y;
   this.type = type;
   this.size = 100;
+  this.count = count;
 
 
 

@@ -45,12 +45,13 @@ function allPieces(){
   }
 
   this.take = function(currPiece){
-    for(var i = 0; i < this.allPieces.length;i++){
-      if((currPiece.x == this.allPieces[i].x) && (currPiece.y == this.allPieces[i].y)){
-        this.allPieces[i].x = 900;
-        this.allPieces[i].y = 0;
-        }
-      }
+    //the problem is that the currPiece is INCLUDED in this.allPieces, so it will always be true
+    // for(var i = 0; i < this.allPieces.length;i++){
+    //   if((currPiece.x == this.allPieces[i].x) && (currPiece.y == this.allPieces[i].y)){
+    //     this.allPieces[i].x = 900;
+    //     this.allPieces[i].y = 0;
+    //     }
+    //   }
   }
 
 }

@@ -1,9 +1,10 @@
-function Piece(x, y, type, count) {
+function Piece(x, y, type, count, shadowCopy) {
   this.x = x;
   this.y = y;
   this.type = type;
   this.size = 100;
   this.count = count;
+  this.shadowCopy = shadowCopy | false;
 
 
 
@@ -72,6 +73,14 @@ function Piece(x, y, type, count) {
   }
 
   this.draw = function() {
-    copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size,this.size);
+    if(this.shadowCopy){
+      console.log("draw shadow");
+      tint(255, 50);
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,(this.x),(this.y),this.size/2,this.size/2);
+    } else{
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size,this.size);
+    }
+
+
   }
 }

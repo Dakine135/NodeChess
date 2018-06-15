@@ -1,6 +1,7 @@
 var chessSprite;
 var allPieces;
 var currPiece = null;
+var shadowPiece = null;
 
 function preload() {
   chessSprite = loadImage('Images/3ZTI1.png');
@@ -30,26 +31,23 @@ function setup(){
 function mousePressed() {
     currPiece = allPieces.getClicked();
     console.log("Piece that was clicked:", currPiece);
+
+    //create shadowCopy that snaps to slots
+    shadowPiece = new Piece(currPiece.x, currPiece.y, currPiece.type, 1, true);
 }
 
 //triggers when you let go of mouse
 function mouseReleased() {
 
   if(currPiece != null){
-    console.log("mouseReleased Before: ", currPiece);
-    console.log("Mouse: ", mouseX, mouseY);
+    //console.log("mouseReleased Before: ", currPiece);
+    //console.log("Mouse: ", mouseX, mouseY);
     let diffX = mouseX % 100;
     let diffY = mouseY % 100;
-    console.log("Diff: ", diffX, diffY);
+    //console.log("Diff: ", diffX, diffY);
     currPiece.x = Math.floor(mouseX - diffX);
     currPiece.y = Math.floor(mouseY - diffY);
     allPieces.take(currPiece);
-
-    console.log("mouseReleased: ", currPiece);
-
-
-
-
     currPiece = null;
   }
 
@@ -64,11 +62,18 @@ function draw(){
   drawBackground();
 
   if (mouseIsPressed === true && currPiece != null) {
-    //see exmaple
-    //https://p5js.org/examples/drawing-continous-lines.html
     currPiece.x = Math.floor(mouseX - 32);
     currPiece.y = Math.floor(mouseY - 32);
-    //and reference Event -> Mouse section
+
+    //handle and draw shadowPiece
+    if(shadowPiece != null){
+      let diffX = mouseX % 100;
+      let diffY = mouseY % 100;
+      shadowPiece.x = Math.floor(mouseX - diffX) + 24;
+      shadowPiece.y = Math.floor(mouseY - diffY) + 24;
+      shadowPiece.draw();
+
+    }
   }
   allPieces.draw();
 } //draw

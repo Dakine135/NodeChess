@@ -82,11 +82,17 @@ function draw(){
 
     //handle and draw shadowPiece
     if(shadowPiece != null){
-      let diffX = mouseX % 100;
-      let diffY = mouseY % 100;
-      shadowPiece.x = Math.floor(mouseX - diffX) + 24;
-      shadowPiece.y = Math.floor(mouseY - diffY) + 24;
+      let gridX = Math.floor(mouseX - mouseX % 100);
+      let gridY = Math.floor(mouseY - mouseY % 100);
+      shadowPiece.x = gridX + 24;
+      shadowPiece.y = gridY + 24;
       shadowPiece.draw();
+      push();
+      fill(0,0,0,0);
+      stroke(255, 204, 0);
+      strokeWeight(4);
+      rect(gridX, gridY, 100, 100);
+      pop();
 
     }
   }

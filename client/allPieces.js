@@ -22,7 +22,7 @@ function allPieces(){
       new Piece("blackKing",400,700,"blackQueen", 1),
       new Piece("blackBishop2",500,700,"blackBishop", 1),
       new Piece("blackKnight2",600,700,"blackKnight", 1),
-      new Piece("blackRook1",700,700,"blackRook", 1)
+      new Piece("blackRook2",700,700,"blackRook", 1)
     ];
 
     for (var i=0; i<8; i++){
@@ -34,6 +34,14 @@ function allPieces(){
       );
     }
   } // new game
+  this.getSquare = function(x , y){
+    for(var i = 0; i < this.boardPieces.length;i++){
+        if((x === this.boardPieces[i].x) && (y === this.boardPieces[i].y)){
+            return this.boardPieces[i];
+          }
+    }
+            return null;
+  }
 
 
   this.getClicked = function(){
@@ -95,6 +103,9 @@ function allPieces(){
       }
     }
   }
+  this.stackDead = function(currPiece){
+
+  }
 
   this.take = function(currPiece){
     //the problem is that the currPiece is INCLUDED in this.allPieces, so it will always be true
@@ -103,8 +114,12 @@ function allPieces(){
          (currPiece.y === this.boardPieces[i].y) &&    //same row
          (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
          (currPiece.side() != this.boardPieces[i].side() )){ //NOT on the same side white/black
-            this.boardPieces[i].x = 900;
-            this.boardPieces[i].y = 0;
+            this.boardPieces[i].x = this.boardPieces[i].graveX;
+            this.boardPieces[i].y = this.boardPieces[i].graveY;
+            var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
+            console.log("getSquare", square);
+            this.stack(square);
+            // allPieces.stack(currPiece);
       }
     }
   }//end take

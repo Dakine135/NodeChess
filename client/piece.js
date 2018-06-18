@@ -7,7 +7,7 @@ function Piece(id, x, y, type, count, shadowCopy) {
   this.count = count;
   this.shadowCopy = shadowCopy | false;
 
-  var pixelsToShift = 6;
+  var pixelsToShift = 8;
 
   //for sprite
   this.spriteSize = 64;
@@ -15,50 +15,74 @@ function Piece(id, x, y, type, count, shadowCopy) {
     case "whiteKing":
       this.spriteX = 0;
       this.spriteY = 0;
+      this.graveX = 800;
+      this.graveY = 0;
       break;
     case "whiteQueen":
       this.spriteX = 64;
       this.spriteY = 0;
+      this.graveX = 900;
+      this.graveY = 0;
       break;
     case "whiteRook":
       this.spriteX = 128;
       this.spriteY = 0;
+      this.graveX = 1000;
+      this.graveY = 0;
       break;
     case "whiteKnight":
       this.spriteX = 192;
       this.spriteY = 0;
+      this.graveX = 800;
+      this.graveY = 100;
       break;
     case "whiteBishop":
       this.spriteX = 256;
       this.spriteY = 0;
+      this.graveX = 900;
+      this.graveY = 100;
       break;
     case "whitePawn":
       this.spriteX = 320;
       this.spriteY = 0;
+      this.graveX = 1000;
+      this.graveY = 100;
       break;
     case "blackKing":
       this.spriteX = 0;
       this.spriteY = 64;
+      this.graveX = 800;
+      this.graveY = 700;
       break;
     case "blackQueen":
       this.spriteX = 64;
       this.spriteY = 64;
+      this.graveX = 900;
+      this.graveY = 700;
       break;
     case "blackRook":
       this.spriteX = 128;
       this.spriteY = 64;
+      this.graveX = 1000;
+      this.graveY = 700;
       break;
     case "blackKnight":
       this.spriteX = 192;
       this.spriteY = 65;
+      this.graveX = 800;
+      this.graveY = 600;
       break;
     case "blackBishop":
       this.spriteX = 256;
       this.spriteY = 65;
+      this.graveX = 900;
+      this.graveY = 600;
       break;
     case "blackPawn":
       this.spriteX = 320;
       this.spriteY = 65;
+      this.graveX = 1000;
+      this.graveY = 600;
       break;
 
   } //sprite switch

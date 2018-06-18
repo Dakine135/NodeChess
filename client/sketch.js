@@ -31,7 +31,7 @@ function setup(){
 //triggers in frame mouse was pressed
 function mousePressed() {
     currPiece = allPieces.getClicked();
-    if(currPiece.count > 1){
+    if(currPiece && currPiece.count > 1){
       //create new piece with unique id at cursor
       var newId = currPiece.id;
       while(allPieces.getById(newId) != null){

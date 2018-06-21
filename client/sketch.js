@@ -2,6 +2,7 @@ var chessSprite;
 var allPieces;
 var currPiece = null;
 var shadowPiece = null;
+var socket;
 
 function preload() {
   chessSprite = loadImage('Images/3ZTI1.png');
@@ -26,6 +27,7 @@ function setup(){
   createCanvas(1101,801);
   allPieces = new allPieces();
   allPieces.newGame();
+  socket = io();
 }
 
 //triggers in frame mouse was pressed
@@ -60,6 +62,7 @@ function mouseReleased() {
     //console.log("Diff: ", diffX, diffY);
     currPiece.x = Math.floor(mouseX - diffX);
     currPiece.y = Math.floor(mouseY - diffY);
+    // socket.emit("testEvent",currPiece);
     allPieces.take(currPiece);
     allPieces.stack(currPiece);
     currPiece = null;
@@ -75,10 +78,17 @@ function keyPressed(){
 //runs every frame
 function draw(){
   drawBackground();
+  socket.on('testBroadcast', function(data){
+    var movingPiece = allPieces.getById(data.id);
+    movingPiece.x = data.x;
+    movingPiece.y = data.y;
+    // console.log(data);
+  });
 
   if (mouseIsPressed === true && currPiece != null) {
     currPiece.x = Math.floor(mouseX - 32);
     currPiece.y = Math.floor(mouseY - 32);
+    socket.emit("testEvent", currPiece);
 
     //handle and draw shadowPiece
     if(shadowPiece != null){

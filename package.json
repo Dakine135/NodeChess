@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Dakine135/NodeChess#readme",
   "dependencies": {
     "express": "^4.16.3",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "socket.io": "^2.1.1"
   }
 }

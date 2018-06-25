@@ -28,6 +28,13 @@ function setup(){
   allPieces = new allPieces();
   allPieces.newGame();
   socket = io();
+
+  socket.on('snap',(data)=>{
+        var movingPiece = allPieces.getById(data.id);
+        movingPiece.x = data.x;
+        movingPiece.y = data.y;
+        console.log("snap at", data);
+  });
 }
 
 //triggers in frame mouse was pressed
@@ -48,6 +55,7 @@ function mousePressed() {
     //create shadowCopy that snaps to slots
     if(currPiece != null){
       shadowPiece = new Piece("Shadow "+currPiece.id, currPiece.x, currPiece.y, currPiece.type, 1, true);
+      console.log("shadowPiece create: ", shadowPiece);
     }
 }
 
@@ -55,30 +63,35 @@ function mousePressed() {
 function mouseReleased() {
 
   if(currPiece != null){
-    //console.log("mouseReleased Before: ", currPiece);
-    //console.log("Mouse: ", mouseX, mouseY);
-    let diffX = mouseX % 100;
-    let diffY = mouseY % 100;
-    //console.log("Diff: ", diffX, diffY);
-    currPiece.x = Math.floor(mouseX - diffX);
-    currPiece.y = Math.floor(mouseY - diffY);
-    // socket.emit("testEvent",currPiece);
+    currPiece = allPieces.snap(currPiece);
+
     allPieces.take(currPiece);
     allPieces.stack(currPiece);
+
+    var data = {
+      id: currPiece.id,
+      x: currPiece.x,
+      y: currPiece.y
+    };
+    socket.emit("snapEvent", data);
+    // socket.on('take', (data)=>{
+    //   var movingPiece = allPieces.getById(data.id);
+    //   allPieces.take(movingPiece);
+    //   console.log("take receive:", data);
+    // });
+    // socket.emit('takeListener', currPiece);
     currPiece = null;
     shadowPiece = null;
-  }
-
+    }
 }
 
 function keyPressed(){
 
 }
-
 //runs every frame
 function draw(){
   drawBackground();
-  socket.on('testBroadcast', function(data){
+  socket.on('pieceMovingUpdate', function(data){
     var movingPiece = allPieces.getById(data.id);
     movingPiece.x = data.x;
     movingPiece.y = data.y;
@@ -86,16 +99,17 @@ function draw(){
   });
 
   if (mouseIsPressed === true && currPiece != null) {
-    currPiece.x = Math.floor(mouseX - 32);
-    currPiece.y = Math.floor(mouseY - 32);
-    socket.emit("testEvent", currPiece);
+    //call to snap piece
+    currPiece =  allPieces.mouseMove(currPiece);
+    socket.emit("pieceMoving", currPiece);
 
     //handle and draw shadowPiece
     if(shadowPiece != null){
-      let gridX = Math.floor(mouseX - mouseX % 100);
-      let gridY = Math.floor(mouseY - mouseY % 100);
+      let gridX = Math.floor(mouseX - (mouseX % 100));
+      let gridY = Math.floor(mouseY - (mouseY % 100));
       shadowPiece.x = gridX + 24;
       shadowPiece.y = gridY + 24;
+      console.log("shadowPiece draw: ", shadowPiece);
       shadowPiece.draw();
       push();
       fill(0,0,0,0);
@@ -103,7 +117,6 @@ function draw(){
       strokeWeight(4);
       rect(gridX, gridY, 100, 100);
       pop();
-
     }
   }
   allPieces.draw();

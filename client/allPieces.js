@@ -123,5 +123,18 @@ function allPieces(){
       }
     }
   }//end take
+  this.mouseMove = function(currPiece){
+    currPiece.x = Math.floor(mouseX - 32);
+    currPiece.y = Math.floor(mouseY - 32);
+    return currPiece;
+  }
+  this.snap = function(currPiece){
+    let diffX = currPiece.x % 100;
+    let diffY = currPiece.y % 100;
+
+    currPiece.x = Math.floor(currPiece.x - diffX);
+    currPiece.y = Math.floor(currPiece.y - diffY);
+    return currPiece;
+  }
 
 }// end allPieces class

@@ -114,5 +114,6 @@ function Piece(id, x, y, type, count, shadowCopy) {
       }
     }
 
+
   }
 }

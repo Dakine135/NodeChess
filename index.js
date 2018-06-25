@@ -23,12 +23,22 @@ app.use(express.static('./client'));
 io.on('connection', function(socket){
   console.log(socket.id);
 
+socket.on('snapEvent', function(data){
+      console.log("currPiece at", data);
+      socket.broadcast.emit('snap', data);
+});
 
 
-  socket.on('testEvent', function(data){
+  socket.on('pieceMoving', function(data){
     // console.log("testEvent:", data);
-    socket.broadcast.emit('testBroadcast', data);
+    socket.broadcast.emit('pieceMovingUpdate', data);
+
   });
+
+
+
+
+
 
 
 

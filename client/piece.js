@@ -7,6 +7,11 @@ function Piece(id, x, y, type, count, shadowCopy) {
   this.count = count;
   this.shadowCopy = shadowCopy | false;
 
+  //for swigining
+  this.swinging = false;
+  this.angle = 0;
+  this.swingDirection = 0.03;
+
   var pixelsToShift = 8;
 
   //for sprite
@@ -106,14 +111,25 @@ function Piece(id, x, y, type, count, shadowCopy) {
       tint(255, 50);
       copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size/2,this.size/2);
     } else{
-      var minSpread = 0 - Math.floor(this.count/2);
-      var maxSpread = 0 + Math.ceil(this.count/2);
-      // console.log(minSpread, " => ", maxSpread, "   Count: ", this.count);
-      for(var i = minSpread; i<maxSpread; i++){
-        copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x+(pixelsToShift*i),this.y,this.size,this.size);
-      }
+
+      if(this.swinging){
+        push();
+        translate(this.x + 50, this.y + 25);
+        rotate(this.angle);
+        copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,-50,-25,this.size,this.size);
+        pop();
+        this.angle = this.angle + this.swingDirection;
+        if(this.angle > (PI/4) || this.angle < (-PI/4)) this.swingDirection = this.swingDirection * -1;
+      } else {
+        var minSpread = 0 - Math.floor(this.count/2);
+        var maxSpread = 0 + Math.ceil(this.count/2);
+        // console.log(minSpread, " => ", maxSpread, "   Count: ", this.count);
+        for(var i = minSpread; i<maxSpread; i++){
+          copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x+(pixelsToShift*i),this.y,this.size,this.size);
+        }
+      } //swinging
+
     }
 
-
-  }
-}
+  } // end draw
+} // end Piece Class

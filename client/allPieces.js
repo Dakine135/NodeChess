@@ -1,8 +1,5 @@
 function allPieces(){
   this.boardPieces = [];
-  this.deadPieces = []; //cureently unused
-
-  this.insertPiece
 
   this.newGame = function(){
     this.boardPieces = [
@@ -86,9 +83,6 @@ function allPieces(){
     this.boardPieces.forEach((piece)=>{
       piece.draw();
     });
-    this.deadPieces.forEach((piece)=>{
-      piece.draw();
-    });
   }
 
   this.stack = function(currPiece){
@@ -102,9 +96,6 @@ function allPieces(){
             this.removeById(currPiece.id);
       }
     }
-  }
-  this.stackDead = function(currPiece){
-
   }
 
   this.take = function(currPiece){
@@ -123,17 +114,23 @@ function allPieces(){
       }
     }
   }//end take
+
+
   this.mouseMove = function(currPiece){
-    currPiece.x = Math.floor(mouseX - 32);
-    currPiece.y = Math.floor(mouseY - 32);
+    let x = Math.floor(mouseX - 50);
+    let y = Math.floor(mouseY - 25);
+    currPiece.x = x;
+    currPiece.y = y;
     return currPiece;
   }
-  this.snap = function(currPiece){
-    let diffX = currPiece.x % 100;
-    let diffY = currPiece.y % 100;
 
-    currPiece.x = Math.floor(currPiece.x - diffX);
-    currPiece.y = Math.floor(currPiece.y - diffY);
+
+  this.snap = function(currPiece){
+    let diffX = mouseX % 100;
+    let diffY = mouseY % 100;
+
+    currPiece.x = Math.floor(mouseX - diffX);
+    currPiece.y = Math.floor(mouseY - diffY);
     return currPiece;
   }
 

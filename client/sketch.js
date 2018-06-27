@@ -56,6 +56,7 @@ function mousePressed() {
     if(currPiece != null){
       shadowPiece = new Piece("Shadow "+currPiece.id, currPiece.x, currPiece.y, currPiece.type, 1, true);
       console.log("shadowPiece create: ", shadowPiece);
+      currPiece.swinging = true;
     }
 }
 
@@ -63,7 +64,10 @@ function mousePressed() {
 function mouseReleased() {
 
   if(currPiece != null){
+    currPiece.swinging = false;
+    currPiece.angle = 0;
     currPiece = allPieces.snap(currPiece);
+
 
     allPieces.take(currPiece);
     allPieces.stack(currPiece);
@@ -109,7 +113,7 @@ function draw(){
       let gridY = Math.floor(mouseY - (mouseY % 100));
       shadowPiece.x = gridX + 24;
       shadowPiece.y = gridY + 24;
-      console.log("shadowPiece draw: ", shadowPiece);
+      // console.log("shadowPiece draw: ", shadowPiece);
       shadowPiece.draw();
       push();
       fill(0,0,0,0);

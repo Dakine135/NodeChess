@@ -12,9 +12,15 @@ function Piece(id, x, y, type, count, shadowCopy) {
   this.pivotX = 50;
   this.pivotY = 25;
   this.angle = 0;
-  this.heading = HALF_PI;
-  this.energy = 0;
-  this.speed = 0;
+  this.swingDirection = "still";
+  this.startSwing = 0;
+  this.potentialEnergy = 0;
+  this.kineticEnergy = 0;
+  this.lastKineticEnergy = 0;
+  this.maxEnergy = 0.4;
+  this.maxkineticEnergy = 0.4
+  this.minimumEnergy = 0.1;
+  this.energyLoss = 0.5;
 
 
   var pixelsToShift = 8;
@@ -113,29 +119,72 @@ function Piece(id, x, y, type, count, shadowCopy) {
 
   this.addSwing = function(heading, mag){
     // console.log(heading, mag);
-    this.heading = heading;
-    this.energy = this.energy + abs(mag);
-    this.speed = 0.1;
-    if(this.energy > 100) this.energy = 100;
-    console.log(this.energy);
-  }
+
+      this.angle = heading;
+      if(this.angle > PI){
+        //convert to negative rotation if past vertical clockwise
+        //basicaly always want to keep rotation between -PI and PI
+        this.anlge = this.angle - (2*PI);
+      }
+      // let diffFromRest = abs(this.angle);
+      this.swingDirection = "down";
+      // this.potentialEnergy = Math.round(map(diffFromRest, 0, PI, 0, 1)*100)/100;
+      this.potentialEnergy = abs(this.angle);
+      this.maxkineticEnergy = map(this.potentialEnergy,0,PI,this.minimumEnergy, this.maxEnergy);
+      this.kineticEnergy = 0;
+      console.log("-----------------");
+      console.log("Energy:", this.potentialEnergy, this.kineticEnergy);
+      console.log("Angle:", this.angle, "Dir:", this.swingDirection);
+      //TODO set kineticEnergy energy based on swing added (mag)
+  
+  } //end addSwig
 
   this.update = function(){
-    let diff = this.heading - this.angle;
-    let force = map(this.energy, 0, 100, 0, 1);
-    this.angle = this.angle + (diff*force);
+    //update potentialEnergy and kineticEnergy
+    // console.log("update: ###################");
+    // console.log("Energy:", Math.round(this.potentialEnergy *100)/100, Math.round(this.kineticEnergy *100)/100);
+    // // console.log("Total: ", this.potentialEnergy + this.kineticEnergy);
+    // console.log("Angle:", Math.round(this.angle *100)/100, "Dir:", this.swingDirection);
+    if(this.swingDirection != "still"){
 
-    if(this.angle > 0.1){
-      // let top = map(force,0,1,0,HALF_PI);
-      this.angle = this.angle + this.speed;
-    }
-    else if(this.angle < -0.1){
-      this.angle = this.angle + this.speed;
-    }
-    else {
-      this.angle = 0;
-    }
-  }
+      if(this.potentialEnergy === 0){
+        console.log("SET TO STILL");
+        this.swingDirection = "still";
+        this.angle = 0;
+      }
+
+      let diffFromTop = abs(this.potentialEnergy - abs(this.angle));
+      // console.log("diffFromTop:",diffFromTop);
+      this.lastKineticEnergy = this.kineticEnergy;
+      this.kineticEnergy = map(diffFromTop, 0, this.potentialEnergy, this.minimumEnergy, this.maxkineticEnergy);
+
+
+      //move angle based on kineticEnergy
+      if(this.swingDirection === "down"){
+        let prevAngle = this.angle;
+        if(this.angle > 0) this.angle = this.angle - this.kineticEnergy;
+        else this.angle = this.angle + this.kineticEnergy;
+        if(Math.sign(prevAngle) != Math.sign(this.angle)) this.swingDirection = "up";
+      }
+      if(this.swingDirection === "up"){
+        let prevAngle = this.angle;
+        if(this.angle > 0) this.angle = this.angle + this.kineticEnergy;
+        else this.angle = this.angle - this.kineticEnergy;
+        if(this.lastKineticEnergy < this.kineticEnergy){
+          this.swingDirection = "down";
+          //remove energy from system
+          this.potentialEnergy = this.potentialEnergy - this.energyLoss;
+          this.maxkineticEnergy = map(this.potentialEnergy,0,PI,this.minimumEnergy, this.maxEnergy);
+        }
+      }
+
+      if(this.potentialEnergy < this.energyLoss) this.potentialEnergy = 0;
+      if(this.angle > PI) this.angle = this.angle - (2*PI);
+      if(this.angle < -PI) this.angle = this.angle + (2*PI);
+
+    }//end swing if not still
+  } // end update
+
 
   this.draw = function() {
     if(this.shadowCopy){
@@ -149,8 +198,6 @@ function Piece(id, x, y, type, count, shadowCopy) {
         rotate(this.angle);
         copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,-(this.pivotX),-(this.pivotY),this.size,this.size);
         pop();
-        // this.angle = this.angle + this.swingDirection;
-        // if(this.angle > (PI/4) || this.angle < (-PI/4)) this.swingDirection = this.swingDirection * -1;
       } else {
         var minSpread = 0 - Math.floor(this.count/2);
         var maxSpread = 0 + Math.ceil(this.count/2);

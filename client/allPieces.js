@@ -125,14 +125,13 @@ function allPieces(){
   this.mouseMove = function(currPiece){
     let x = Math.floor(mouseX - currPiece.pivotX);
     let y = Math.floor(mouseY - currPiece.pivotY);
-    let v1 = createVector(currPiece.x, currPiece.y);
-    let v2 = createVector(x, y);
-    let v3 = p5.Vector.sub(v2, v1);
-    v3.rotate(HALF_PI);
-    let mag = Math.round(v3.mag()*100)/100;
-    let heading = Math.round(v3.heading()*100)/100;
-    // console.log(heading, mag, mag*heading);
-    currPiece.addSwing(heading, mag);
+    // let v1 = createVector(currPiece.x, currPiece.y);
+    // let v2 = createVector(x, y);
+    // let v3 = p5.Vector.sub(v2, v1);
+    // v3.rotate(HALF_PI);
+    // let mag = Math.round(v3.mag()*100)/100;
+    // let heading = Math.round(v3.heading()*100)/100;
+    // currPiece.addSwing(heading, mag);
     currPiece.x = x;
     currPiece.y = y;
     return currPiece;

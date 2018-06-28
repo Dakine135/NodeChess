@@ -9,8 +9,13 @@ function Piece(id, x, y, type, count, shadowCopy) {
 
   //for swigining
   this.swinging = false;
+  this.pivotX = 50;
+  this.pivotY = 25;
   this.angle = 0;
-  this.swingDirection = 0.03;
+  this.heading = HALF_PI;
+  this.energy = 0;
+  this.speed = 0;
+
 
   var pixelsToShift = 8;
 
@@ -106,6 +111,32 @@ function Piece(id, x, y, type, count, shadowCopy) {
     return false;
   }
 
+  this.addSwing = function(heading, mag){
+    // console.log(heading, mag);
+    this.heading = heading;
+    this.energy = this.energy + abs(mag);
+    this.speed = 0.1;
+    if(this.energy > 100) this.energy = 100;
+    console.log(this.energy);
+  }
+
+  this.update = function(){
+    let diff = this.heading - this.angle;
+    let force = map(this.energy, 0, 100, 0, 1);
+    this.angle = this.angle + (diff*force);
+
+    if(this.angle > 0.1){
+      // let top = map(force,0,1,0,HALF_PI);
+      this.angle = this.angle + this.speed;
+    }
+    else if(this.angle < -0.1){
+      this.angle = this.angle + this.speed;
+    }
+    else {
+      this.angle = 0;
+    }
+  }
+
   this.draw = function() {
     if(this.shadowCopy){
       tint(255, 50);
@@ -114,12 +145,12 @@ function Piece(id, x, y, type, count, shadowCopy) {
 
       if(this.swinging){
         push();
-        translate(this.x + 50, this.y + 25);
+        translate(this.x + this.pivotX, this.y + this.pivotY);
         rotate(this.angle);
-        copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,-50,-25,this.size,this.size);
+        copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,-(this.pivotX),-(this.pivotY),this.size,this.size);
         pop();
-        this.angle = this.angle + this.swingDirection;
-        if(this.angle > (PI/4) || this.angle < (-PI/4)) this.swingDirection = this.swingDirection * -1;
+        // this.angle = this.angle + this.swingDirection;
+        // if(this.angle > (PI/4) || this.angle < (-PI/4)) this.swingDirection = this.swingDirection * -1;
       } else {
         var minSpread = 0 - Math.floor(this.count/2);
         var maxSpread = 0 + Math.ceil(this.count/2);

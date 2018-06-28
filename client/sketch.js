@@ -2,7 +2,9 @@ var chessSprite;
 var allPieces;
 var currPiece = null;
 var shadowPiece = null;
+var lastPositionBox = null;
 var socket;
+
 
 function preload() {
   chessSprite = loadImage('Images/3ZTI1.png');
@@ -55,7 +57,8 @@ function mousePressed() {
     //create shadowCopy that snaps to slots
     if(currPiece != null){
       shadowPiece = new Piece("Shadow "+currPiece.id, currPiece.x, currPiece.y, currPiece.type, 1, true);
-      console.log("shadowPiece create: ", shadowPiece);
+      // console.log("shadowPiece create: ", shadowPiece);
+      lastPositionBox = {x:currPiece.x, y:currPiece.y};
       currPiece.swinging = true;
     }
 }
@@ -64,8 +67,8 @@ function mousePressed() {
 function mouseReleased() {
 
   if(currPiece != null){
-    currPiece.swinging = false;
-    currPiece.angle = 0;
+    // currPiece.swinging = false;
+    // currPiece.angle = 0;
     currPiece = allPieces.snap(currPiece);
 
 
@@ -86,6 +89,7 @@ function mouseReleased() {
     // socket.emit('takeListener', currPiece);
     currPiece = null;
     shadowPiece = null;
+    lastPositionBox = null;
     }
 }
 
@@ -117,11 +121,18 @@ function draw(){
       shadowPiece.draw();
       push();
       fill(0,0,0,0);
-      stroke(255, 204, 0);
-      strokeWeight(4);
+      stroke('yellow');
+      strokeWeight(5);
       rect(gridX, gridY, 100, 100);
+      pop();
+      push();
+      fill(0,0,0,0);
+      stroke('green');
+      strokeWeight(4);
+      rect(lastPositionBox.x, lastPositionBox.y, 100, 100);
       pop();
     }
   }
+  allPieces.update();
   allPieces.draw();
 } //draw

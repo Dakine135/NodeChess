@@ -85,6 +85,12 @@ function allPieces(){
     });
   }
 
+  this.update = function(){
+    this.boardPieces.forEach((piece)=>{
+      piece.update();
+    });
+  }
+
   this.stack = function(currPiece){
     for(var i = 0; i < this.boardPieces.length;i++){
       if((currPiece.x === this.boardPieces[i].x) &&    //same column
@@ -117,8 +123,16 @@ function allPieces(){
 
 
   this.mouseMove = function(currPiece){
-    let x = Math.floor(mouseX - 50);
-    let y = Math.floor(mouseY - 25);
+    let x = Math.floor(mouseX - currPiece.pivotX);
+    let y = Math.floor(mouseY - currPiece.pivotY);
+    let v1 = createVector(currPiece.x, currPiece.y);
+    let v2 = createVector(x, y);
+    let v3 = p5.Vector.sub(v2, v1);
+    v3.rotate(HALF_PI);
+    let mag = Math.round(v3.mag()*100)/100;
+    let heading = Math.round(v3.heading()*100)/100;
+    // console.log(heading, mag, mag*heading);
+    currPiece.addSwing(heading, mag);
     currPiece.x = x;
     currPiece.y = y;
     return currPiece;

@@ -42,18 +42,32 @@ function setup(){
   createCanvas(1101,801);
   frameRate(30);
   allPieces = new allPieces();
-  allPieces.newGame();
+  // allPieces.newGame();
   socket = io();
 
-  socket.on('snap',(data)=>{
-        var movingPiece = allPieces.getById(data.id);
-        movingPiece.x = data.x;
-        movingPiece.y = data.y;
-        console.log("snap at", data);
+  socket.on('pieceMovingUpdate', function(data){
+    var movingPiece = allPieces.getById(data.id);
+    movingPiece.x = data.x;
+    movingPiece.y = data.y;
+    // console.log(data);
+  });
+
+  // socket.on('snap',(data)=>{
+  //       var movingPiece = allPieces.getById(data.id);
+  //       movingPiece.x = data.x;
+  //       movingPiece.y = data.y;
+  //       console.log("snap at", data);
+  // });
+
+  socket.on('boardState', (boardData) => {
+    console.log("boardStateUpdate");
+    boardData.forEach((serverPiece)=>{
+      allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y, serverPiece.type, serverPiece.count);
+    });
   });
 
     // create an engine
-    engine = Engine.create();
+    // engine = Engine.create();
 
     // create two boxes and a ground
     // boxA = Bodies.rectangle(400, 200, 80, 80);
@@ -66,7 +80,7 @@ function setup(){
      // World.add(engine.world, [boxA, boxB, ground]);
 
      // run the engine
-     Engine.run(engine);
+     // Engine.run(engine);
 
 } //end setup
 
@@ -104,8 +118,8 @@ function mouseReleased() {
     currPiece = allPieces.snap(currPiece);
 
 
-    allPieces.take(currPiece);
-    allPieces.stack(currPiece);
+    // allPieces.take(currPiece);
+    // allPieces.stack(currPiece);
 
     var data = {
       id: currPiece.id,
@@ -128,15 +142,11 @@ function mouseReleased() {
 function keyPressed(){
 
 }
+
+
 //runs every frame
 function draw(){
   drawBackground();
-  socket.on('pieceMovingUpdate', function(data){
-    var movingPiece = allPieces.getById(data.id);
-    movingPiece.x = data.x;
-    movingPiece.y = data.y;
-    // console.log(data);
-  });
 
   if (mouseIsPressed === true && currPiece != null) {
     //call to snap piece

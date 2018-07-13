@@ -3,44 +3,43 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var AllPieces = require('./allPieces.js');
 io.on('connection', function(){ /* … */ });
 server.listen(port);
 
 
 app.use(express.static('./client'));
 
-
-// app.get('/', function(req, res){
-//   res.send('<h1>Hello world</h1>');
-// });
-
-
-// app.listen(port, () => {
-//   console.log('Node Chess listening on port ', port);
-// });
+//setup board on startup
+var board = new AllPieces();
+board.newGame();
+// console.log(board);
 
 
 io.on('connection', function(socket){
   console.log(socket.id);
 
-socket.on('snapEvent', function(data){
-      console.log("currPiece at", data);
-      socket.broadcast.emit('snap', data);
-});
+  socket.emit('boardState', board.boardPieces);
 
-
-  socket.on('pieceMoving', function(data){
-    // console.log("testEvent:", data);
-    socket.broadcast.emit('pieceMovingUpdate', data);
-
+  socket.on('snapEvent', function(data){
+      console.log("Snap at", data);
+      var movingPiece = board.getById(data.id);
+      movingPiece.x = data.x;
+      movingPiece.y = data.y;
+      board.take(movingPiece);
+      board.stack(movingPiece);
+      io.sockets.emit('boardState', board.boardPieces);
   });
 
 
+  socket.on('pieceMoving', function(data){
+    // console.log("pieceMoving:", data);
+    socket.broadcast.emit('pieceMovingUpdate', data);
+  });
 
 
-
-
-
-
+  // socket.on('mousePressedListener', function(data){
+  //   socket.broadcast.emit('mousePressedEvent', data);
+  // });
 
 });

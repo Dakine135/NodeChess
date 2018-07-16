@@ -19,7 +19,7 @@ function AllPieces(){
       new Piece("blackKnight1",100,700,"blackKnight", 1),
       new Piece("blackBishop1",200,700,"blackBishop", 1),
       new Piece("blackKing",300,700,"blackKing", 1),
-      new Piece("blackKing",400,700,"blackQueen", 1),
+      new Piece("blackQuenn",400,700,"blackQueen", 1),
       new Piece("blackBishop2",500,700,"blackBishop", 1),
       new Piece("blackKnight2",600,700,"blackKnight", 1),
       new Piece("blackRook2",700,700,"blackRook", 1)

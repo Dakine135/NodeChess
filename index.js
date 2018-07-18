@@ -19,16 +19,29 @@ board.newGame();
 io.on('connection', function(socket){
   console.log(socket.id);
 
-  socket.emit('boardState', board.boardPieces);
+  let gameStateInitial = {
+    'board': board.boardPieces,
+    'dead': null
+  }
+  socket.emit('boardState', gameStateInitial);
 
   socket.on('snapEvent', function(data){
       console.log("Snap at", data);
       var movingPiece = board.getById(data.id);
-      movingPiece.x = data.x;
-      movingPiece.y = data.y;
-      board.take(movingPiece);
-      board.stack(movingPiece);
-      io.sockets.emit('boardState', board.boardPieces);
+
+      if(movingPiece != null){
+        movingPiece.x = data.x;
+        movingPiece.y = data.y;
+        var idOfDead = null;
+        idOfDead = board.take(movingPiece);
+        board.stack(movingPiece);
+        console.log(idOfDead);
+        let gameState = {
+          'board': board.boardPieces,
+          'dead': idOfDead
+        }
+        io.sockets.emit('boardState', gameState);
+    }
   });
 
 

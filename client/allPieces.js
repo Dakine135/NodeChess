@@ -41,6 +41,7 @@ function allPieces(){
     } else {
       tempPiece.x = x;
       tempPiece.y = y;
+      tempPiece.count = count;
     }
   }
 
@@ -105,35 +106,35 @@ function allPieces(){
     // });
   }
 
-  this.stack = function(currPiece){
-    for(var i = 0; i < this.boardPieces.length;i++){
-      if((currPiece.x === this.boardPieces[i].x) &&    //same column
-         (currPiece.y === this.boardPieces[i].y) &&    //same row
-         (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
-         (currPiece.type === this.boardPieces[i].type) &&     //IS the same type
-         (currPiece.side() === this.boardPieces[i].side() )){ //IS on the same side white/black
-            this.boardPieces[i].count = this.boardPieces[i].count + currPiece.count;
-            this.removeById(currPiece.id);
-      }
-    }
-  }
-
-  this.take = function(currPiece){
-    //the problem is that the currPiece is INCLUDED in this.allPieces, so it will always be true
-    for(var i = 0; i < this.boardPieces.length;i++){
-      if((currPiece.x === this.boardPieces[i].x) &&    //same column
-         (currPiece.y === this.boardPieces[i].y) &&    //same row
-         (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
-         (currPiece.side() != this.boardPieces[i].side() )){ //NOT on the same side white/black
-            this.boardPieces[i].x = this.boardPieces[i].graveX;
-            this.boardPieces[i].y = this.boardPieces[i].graveY;
-            var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
-            console.log("getSquare", square);
-            this.stack(square);
-            // allPieces.stack(currPiece);
-      }
-    }
-  }//end take
+  // this.stack = function(currPiece){
+  //   for(var i = 0; i < this.boardPieces.length;i++){
+  //     if((currPiece.x === this.boardPieces[i].x) &&    //same column
+  //        (currPiece.y === this.boardPieces[i].y) &&    //same row
+  //        (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
+  //        (currPiece.type === this.boardPieces[i].type) &&     //IS the same type
+  //        (currPiece.side() === this.boardPieces[i].side() )){ //IS on the same side white/black
+  //           this.boardPieces[i].count = this.boardPieces[i].count + currPiece.count;
+  //           this.removeById(currPiece.id);
+  //     }
+  //   }
+  // }
+  //
+  // this.take = function(currPiece){
+  //   //the problem is that the currPiece is INCLUDED in this.allPieces, so it will always be true
+  //   for(var i = 0; i < this.boardPieces.length;i++){
+  //     if((currPiece.x === this.boardPieces[i].x) &&    //same column
+  //        (currPiece.y === this.boardPieces[i].y) &&    //same row
+  //        (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
+  //        (currPiece.side() != this.boardPieces[i].side() )){ //NOT on the same side white/black
+  //           this.boardPieces[i].x = this.boardPieces[i].graveX;
+  //           this.boardPieces[i].y = this.boardPieces[i].graveY;
+  //           var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
+  //           console.log("getSquare", square);
+  //           this.stack(square);
+  //           // allPieces.stack(currPiece);
+  //     }
+  //   }
+  // }//end take
 
 
   this.mouseMove = function(currPiece){

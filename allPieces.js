@@ -82,19 +82,21 @@ function AllPieces(){
 
   this.removeById = function(id){
     var index = 0;
-    var found = false;
+    var found = null;
     while(index < this.boardPieces.length){
       if(this.boardPieces[index].id === id){
-        found = true;
+        found = this.boardPieces[index].id;
         break;
       }
       index++;
     }
     if(found) this.boardPieces.splice(index,1);
+    console.log("Hey" , found);
     return found;
   }
 
   this.stack = function(currPiece){
+    // var idOfDead = null
     for(var i = 0; i < this.boardPieces.length;i++){
       if((currPiece.x === this.boardPieces[i].x) &&    //same column
          (currPiece.y === this.boardPieces[i].y) &&    //same row
@@ -102,13 +104,17 @@ function AllPieces(){
          (currPiece.type === this.boardPieces[i].type) &&     //IS the same type
          (currPiece.side() === this.boardPieces[i].side() )){ //IS on the same side white/black
             this.boardPieces[i].count = this.boardPieces[i].count + currPiece.count;
-            this.removeById(currPiece.id);
+            return this.removeById(currPiece.id);
+            // idOfDead = this.removeById(currPiece.id);
+            // console.log("Inside loop",idOfDead)
       }
-    }
-  }
-  this.stackDead = function(currPiece){
 
+    }
+    // console.log("idOfDead in stack", idOfDead)
+    // return idOfDead;
   }
+
+
 
   this.take = function(currPiece){
     //the problem is that the currPiece is INCLUDED in this.allPieces, so it will always be true
@@ -121,7 +127,7 @@ function AllPieces(){
             this.boardPieces[i].y = this.boardPieces[i].graveY;
             var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
             console.log("getSquare", square);
-            this.stack(square);
+            return this.stack(square);
             // allPieces.stack(currPiece);
       }
     }

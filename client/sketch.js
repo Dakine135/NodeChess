@@ -60,10 +60,15 @@ function setup(){
   // });
 
   socket.on('boardState', (boardData) => {
-    console.log("boardStateUpdate");
-    boardData.forEach((serverPiece)=>{
-      allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y, serverPiece.type, serverPiece.count);
+    console.log("boardStateUpdate: ", boardData);
+
+    boardData.board.forEach((serverPiece)=>{
+      allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y,
+                               serverPiece.type, serverPiece.count);
     });
+    if(boardData.dead != null){
+      allPieces.removeById(boardData.dead);
+    }
   });
 
     // create an engine

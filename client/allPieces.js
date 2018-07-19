@@ -1,6 +1,7 @@
 function allPieces(){
   this.boardPieces = [];
 
+//call to update from server
   this.createOrUpdate = function(id, x, y, type, count){
     var tempPiece = this.getById(id);
     if(tempPiece == null){
@@ -39,9 +40,18 @@ function allPieces(){
       while(allPieces.getById(newId) != null){
         newId = newId + "#";
       }
-      tempReturn.count--;
+      // tempReturn.count--;
+      //
+      var data = {
+        id: tempReturn.id,
+        newId: newId
+      };
+      socket.emit('unStackEvent', data);
+
       tempReturn = new Piece(newId, tempReturn.x, tempReturn.y, tempReturn.type, 1);
-      allPieces.boardPieces.push(tempReturn);
+      // allPieces.boardPieces.push(tempReturn);
+
+
     } // end create new Piece at cursor
 
     return tempReturn;

@@ -45,6 +45,19 @@ io.on('connection', function(socket){
         io.sockets.emit('boardState', gameState);
     }
   });
+  socket.on('unStackEvent', function(data){
+    var unStackPiece = board.getById(data.id);
+    if(unStackPiece != null && unStackPiece > 1){
+      unStackPiece.count--;
+      board.boardPieces.push(new Piece(data.newId, unStackPiece.x, unStackPiece.y, unStackPiece.type, 1));
+  }
+    let gameState = {
+      'board': board.boardPieces,
+      'dead': null
+    }
+    io.sockets.emit('boardState', gameState);
+
+  });
 
 
   socket.on('pieceMoving', function(data){

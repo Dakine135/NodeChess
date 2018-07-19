@@ -69,14 +69,6 @@ function mouseReleased() {
 
   if(currPiece != null){
     currPiece = allPieces.snap(currPiece);
-
-    var data = {
-      id: currPiece.id,
-      x: currPiece.x,
-      y: currPiece.y
-    };
-    socket.emit("snapEvent", data);
-
     currPiece = null;
     }
 }
@@ -84,7 +76,6 @@ function mouseReleased() {
 function keyPressed(){
 
 }
-
 
 //runs every frame
 function draw(){

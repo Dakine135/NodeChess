@@ -130,6 +130,14 @@ class Piece {
       //set board Logic Position
       this.posX = x;
       this.posY = y;
+
+      var data = {
+        id: this.id,
+        x: this.posX,
+        y: this.posY
+      };
+      socket.emit("snapEvent", data);
+
     }
   } //end moveTo
 
@@ -161,7 +169,7 @@ class Piece {
       //draw box from last position
       push();
       fill(0,0,0,0);
-      stroke('green');
+      stroke('Red');
       strokeWeight(4);
       rect(this.posX, this.posY, 100, 100);
       pop();

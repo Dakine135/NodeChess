@@ -1,6 +1,8 @@
 let port = 8000;
 var express = require('express');
 var app = express();
+var reload = require('reload');
+reload(app);
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var AllPieces = require('./allPieces.js');

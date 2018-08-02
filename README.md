@@ -1,2 +1,2 @@
 # NodeChess
-Multiplayer chess Impliment with Node Sockets
+Multiplayer chess Implement with Node Sockets

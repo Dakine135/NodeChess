@@ -47,7 +47,7 @@ function setup(){
 
     boardData.board.forEach((serverPiece)=>{
       allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y,
-                               serverPiece.type, serverPiece.count);
+                               serverPiece.type);
     });
 
     allPieces.checkCounts();

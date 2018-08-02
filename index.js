@@ -19,7 +19,7 @@ board.newGame();
 
 
 io.on('connection', function(socket){
-  console.log(socket.id);
+  console.log("connection", socket.id);
 
   let gameStateInitial = {
     'board': board.boardPieces,
@@ -35,9 +35,9 @@ io.on('connection', function(socket){
         movingPiece.x = data.x;
         movingPiece.y = data.y;
         var idOfDead = null;
-        idOfDead = board.take(movingPiece);
-        board.stack(movingPiece);
-        console.log(idOfDead);
+        board.take(movingPiece);
+        idOfDead = board.stack(movingPiece);
+        console.log("ID of Dead",idOfDead);
         let gameState = {
           'board': board.boardPieces,
           'dead': idOfDead
@@ -45,17 +45,26 @@ io.on('connection', function(socket){
         io.sockets.emit('boardState', gameState);
     }
   });
+
+
   socket.on('unStackEvent', function(data){
+    console.log("Unstack Event");
     var unStackPiece = board.getById(data.id);
-    if(unStackPiece != null && unStackPiece > 1){
+    if(unStackPiece != null){
+      console.log("Unstacked piece" , data.newId);
       unStackPiece.count--;
-      board.boardPieces.push(new Piece(data.newId, unStackPiece.x, unStackPiece.y, unStackPiece.type, 1));
+      board.setNewPiece(data.newId , unStackPiece);
+
+
+      // board.boardPieces.push(new Piece(data.newId, unStackPiece.x, unStackPiece.y, unStackPiece.type, 1));
   }
     let gameState = {
       'board': board.boardPieces,
       'dead': null
     }
     io.sockets.emit('boardState', gameState);
+
+    socket.emit('setCurr',data.newId);
 
   });
 

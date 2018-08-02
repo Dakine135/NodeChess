@@ -7,6 +7,7 @@ function allPieces(){
     if(tempPiece == null){
       tempPiece = new Piece(id, x, y, type, count);
       this.boardPieces.push(tempPiece);
+      console.log("Create Piece ID", id);
     } else {
       tempPiece.x = x;
       tempPiece.y = y;
@@ -23,6 +24,10 @@ function allPieces(){
     }
             return null;
   }
+  // this.setNewPiece = function(data){
+  //     this.boardPieces.push(
+  //       new Piece(data.id, data.x, data.y, data.type, 1));
+  // }
 
 
   this.getClicked = function(){
@@ -47,8 +52,9 @@ function allPieces(){
         newId: newId
       };
       socket.emit('unStackEvent', data);
+      tempReturn = null;
 
-      tempReturn = new Piece(newId, tempReturn.x, tempReturn.y, tempReturn.type, 1);
+      // tempReturn = new Piece(newId, tempReturn.x, tempReturn.y, tempReturn.type, 1);
       // allPieces.boardPieces.push(tempReturn);
 
 

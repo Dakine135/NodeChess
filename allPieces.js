@@ -42,6 +42,13 @@ function AllPieces(){
     }
             return null;
   }
+  this.setNewPiece = function(newId, data){
+      this.boardPieces.push(
+        new Piece(newId, data.x, data.y, data.type, 1));
+  }
+  this.castle = function(data){
+
+  }
 
 
   this.getClicked = function(){

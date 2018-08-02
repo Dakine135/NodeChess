@@ -37,6 +37,11 @@ function setup(){
     // console.log(data);
   });
 
+  socket.on('setCurr', function(data){
+    console.log("SetCurr", data);
+    currPiece = allPieces.getById(data);
+  });
+
   // socket.on('snap',(data)=>{
   //       var movingPiece = allPieces.getById(data.id);
   //       movingPiece.x = data.x;

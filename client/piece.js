@@ -1,6 +1,6 @@
 class Piece {
 
-  constructor(id, x, y, type, shadowCopy){
+  constructor(id, x, y, type){
     this.id = id;
 
     //set draw position
@@ -13,12 +13,13 @@ class Piece {
 
     this.type = type;
     this.size = 100;
-    this.shadowCopy = shadowCopy | false;
 
     //for moving
     this.pivotX = 50;
     this.pivotY = 25;
     this.moving = false;
+    this.pulseScale = 1;
+    this.pulseDir = -1;
 
 
     //for sprite
@@ -142,38 +143,61 @@ class Piece {
 
   //function runs every client frame/tick
   update(){
+    this.pulseScale = this.pulseScale + (0.02 * this.pulseDir);
+    if(this.pulseScale < 0.4) this.pulseDir = 1;
+    if(this.pulseScale > 1) this.pulseDir = -1;
+    // console.log(this.pulseScale);
 
   } // end update
 
 
   draw() {
     if(this.moving){
-
-      //handle and draw shadowPiece
+      //calculate grid mouse is in
       let gridX = Math.floor(mouseX - (mouseX % 100));
       let gridY = Math.floor(mouseY - (mouseY % 100));
-      let shadowSprite = {};
-      shadowSprite.x = gridX + 24;
-      shadowSprite.y = gridY + 24;
-      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,shadowSprite.x,shadowSprite.y,this.size/2,this.size/2);
 
-      //draw box in cell that shadowSprite is in
+      //handle and draw shadowPiece
+      let shadowSpriteX = gridX + ((1 - this.pulseScale) * (this.size/2));
+      let shadowSpriteY = gridY + ((1 - this.pulseScale) * (this.size/2));
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,
+        shadowSpriteX, shadowSpriteY,
+        this.size * this.pulseScale, this.size * this.pulseScale);
+
+      //draw in cell that shadowSprite is in
       push();
-      fill(0,0,0,0);
+      rectMode(CENTER);
+      fill(255, 255, 0, 100);
       stroke('yellow');
-      strokeWeight(5);
-      rect(gridX, gridY, 100, 100);
+      strokeWeight(1);
+      rect(gridX+50, gridY+50, 100 * this.pulseScale, 100 * this.pulseScale);
       pop();
 
-      //draw box from last position
+      //draw last position
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,
+        this.posX,this.posY,
+        this.size,this.size);
       push();
-      fill(0,0,0,0);
+      fill(255, 0, 0, 100);
       stroke('Red');
-      strokeWeight(4);
+      strokeWeight(1);
       rect(this.posX, this.posY, 100, 100);
       pop();
 
+      //draw piece in hand/cursor
+      let sizeScale = 3/4;
+      let xShift = -this.pivotX * sizeScale;
+      let yShift = -this.pivotY * sizeScale;
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,
+        this.x + xShift, this.y + yShift,
+        this.size*sizeScale,this.size*sizeScale);
     }
-    copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size,this.size);
+    else{
+      //draw normal non-moving peice on board
+      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,
+        this.x,this.y,
+        this.size,this.size);
+    }
+
   } // end draw
 } // end Piece Class

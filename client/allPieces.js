@@ -81,8 +81,8 @@ function allPieces(){
 
   this.mouseMove = function(currPiece){
     currPiece.moving = true;
-    let x = Math.floor(mouseX - currPiece.pivotX);
-    let y = Math.floor(mouseY - currPiece.pivotY);
+    let x = Math.floor(mouseX);
+    let y = Math.floor(mouseY);
     currPiece.x = x;
     currPiece.y = y;
     return currPiece;

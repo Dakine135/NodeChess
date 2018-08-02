@@ -6,6 +6,7 @@ class Piece {
     //set draw position
     this.x = x;
     this.y = y;
+    this.offsetX = 0;
 
     //board Logic Position
     this.posX = x;
@@ -20,6 +21,12 @@ class Piece {
     this.moving = false;
     this.pulseScale = 1;
     this.pulseDir = -1;
+
+    //for animation
+    this.animation = false;
+    this.animateToX = x;
+    this.animateToY = y;
+    //currently not implimented
 
 
     //for sprite
@@ -107,10 +114,12 @@ class Piece {
   }
 
   clicked(){
-    if(mouseX > this.x && mouseX < this.x + this.size &&
-       mouseY > this.y && mouseY < this.y + this.size
+    if(this.animation) return false;
+    if(mouseX > this.posX && mouseX < this.posX + this.size &&
+       mouseY > this.posY && mouseY < this.posY + this.size
     ){
-         console.log("Clicked on ",this.type," at ",this.x,",",this.y);
+         // console.log("Clicked on ",this.type," at ",this.x,",",this.y);
+         console.log("Clicked on: ", this);
          return true;
     }
     return false;
@@ -119,8 +128,12 @@ class Piece {
 
   moveTo(x, y){
     this.moving = false;
-    if(this.posX === x && this.poxY === y){
+    console.log("moveTo: ",x, y, "From ", this.posX, this.posY);
+    if(this.posX == x && this.posY == y){
       //piece was put back down in same spot, aka didnt move
+      console.log("Piece Didnt change locations");
+      this.x = this.posX;
+      this.y = this.posY;
     } else {
       //set draw postion
       this.x = x;
@@ -136,9 +149,17 @@ class Piece {
         y: this.posY
       };
       socket.emit("movePieceEvent", data);
-
+      allPieces.checkCounts();
     }
+
   } //end moveTo
+
+  serverUpdate(x, y){
+      this.x = x;
+      this.y = y;
+      this.posX = x;
+      this.posY = y;
+  }
 
 
   //function runs every client frame/tick
@@ -195,7 +216,7 @@ class Piece {
     else{
       //draw normal non-moving peice on board
       copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,
-        this.x,this.y,
+        this.x + this.offsetX,this.y,
         this.size,this.size);
     }
 

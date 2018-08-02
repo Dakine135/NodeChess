@@ -49,9 +49,9 @@ function setup(){
       allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y,
                                serverPiece.type, serverPiece.count);
     });
-    if(boardData.dead != null){
-      allPieces.removeById(boardData.dead);
-    }
+
+    allPieces.checkCounts();
+
   });
 
 } //end setup

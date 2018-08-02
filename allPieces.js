@@ -115,6 +115,8 @@ function AllPieces(){
             this.boardPieces[i].x = this.boardPieces[i].graveX;
             this.boardPieces[i].y = this.boardPieces[i].graveY;
             var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
+            //TODO might kill all pieces if placed in graveYard
+            //On a stacked tile
       }
     }
   }//end take

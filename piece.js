@@ -1,5 +1,5 @@
 module.exports = Piece;
-function Piece(id, x, y, type, count, shadowCopy) {
+function Piece(id, x, y, type, shadowCopy) {
   this.id = id;
 
   //set draw position
@@ -12,7 +12,7 @@ function Piece(id, x, y, type, count, shadowCopy) {
 
   this.type = type;
   this.size = 100;
-  this.count = count;
+  // this.count = count;
 
   //for sprite
   this.spriteSize = 64;

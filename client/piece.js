@@ -1,6 +1,6 @@
 class Piece {
 
-  constructor(id, x, y, type, count, shadowCopy){
+  constructor(id, x, y, type, shadowCopy){
     this.id = id;
 
     //set draw position
@@ -13,7 +13,6 @@ class Piece {
 
     this.type = type;
     this.size = 100;
-    this.count = count;
     this.shadowCopy = shadowCopy | false;
 
     //for moving
@@ -21,7 +20,6 @@ class Piece {
     this.pivotY = 25;
     this.moving = false;
 
-    this.pixelsToShift = 8;
 
     //for sprite
     this.spriteSize = 64;
@@ -136,12 +134,13 @@ class Piece {
         x: this.posX,
         y: this.posY
       };
-      socket.emit("snapEvent", data);
+      socket.emit("movePieceEvent", data);
 
     }
   } //end moveTo
 
 
+  //function runs every client frame/tick
   update(){
 
   } // end update
@@ -175,11 +174,6 @@ class Piece {
       pop();
 
     }
-    var minSpread = 0 - Math.floor(this.count/2);
-    var maxSpread = 0 + Math.ceil(this.count/2);
-    // console.log(minSpread, " => ", maxSpread, "   Count: ", this.count);
-    for(var i = minSpread; i<maxSpread; i++){
-      copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x+(this.pixelsToShift*i),this.y,this.size,this.size);
-    }
+    copy(chessSprite,this.spriteX,this.spriteY,this.spriteSize,this.spriteSize,this.x,this.y,this.size,this.size);
   } // end draw
 } // end Piece Class

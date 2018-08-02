@@ -6,31 +6,31 @@ function AllPieces(){
 
   this.newGame = function(){
     this.boardPieces = [
-      new Piece("whiteRook1",0,0,"whiteRook", 1),
-      new Piece("whiteKnight1",100,0,"whiteKnight", 1),
-      new Piece("whiteBishop1",200,0,"whiteBishop", 1),
-      new Piece("whiteKing",300,0,"whiteKing", 1),
-      new Piece("whiteQueen",400,0,"whiteQueen", 1),
-      new Piece("whiteBishop2",500,0,"whiteBishop", 1),
-      new Piece("whiteKnight2",600,0,"whiteKnight", 1),
-      new Piece("whiteRook2",700,0,"whiteRook", 1),
+      new Piece("whiteRook1",0,0,"whiteRook"),
+      new Piece("whiteKnight1",100,0,"whiteKnight"),
+      new Piece("whiteBishop1",200,0,"whiteBishop"),
+      new Piece("whiteKing",300,0,"whiteKing"),
+      new Piece("whiteQueen",400,0,"whiteQueen"),
+      new Piece("whiteBishop2",500,0,"whiteBishop"),
+      new Piece("whiteKnight2",600,0,"whiteKnight"),
+      new Piece("whiteRook2",700,0,"whiteRook"),
 
-      new Piece("blackRook1",0,700,"blackRook", 1),
-      new Piece("blackKnight1",100,700,"blackKnight", 1),
-      new Piece("blackBishop1",200,700,"blackBishop", 1),
-      new Piece("blackKing",300,700,"blackKing", 1),
-      new Piece("blackQuenn",400,700,"blackQueen", 1),
-      new Piece("blackBishop2",500,700,"blackBishop", 1),
-      new Piece("blackKnight2",600,700,"blackKnight", 1),
-      new Piece("blackRook2",700,700,"blackRook", 1)
+      new Piece("blackRook1",0,700,"blackRook"),
+      new Piece("blackKnight1",100,700,"blackKnight"),
+      new Piece("blackBishop1",200,700,"blackBishop"),
+      new Piece("blackKing",300,700,"blackKing"),
+      new Piece("blackQuenn",400,700,"blackQueen"),
+      new Piece("blackBishop2",500,700,"blackBishop"),
+      new Piece("blackKnight2",600,700,"blackKnight"),
+      new Piece("blackRook2",700,700,"blackRook")
     ];
 
     for (var i=0; i<8; i++){
       this.boardPieces.push(
-        new Piece("whitePawn"+i,100*i,100,"whitePawn",1)
+        new Piece("whitePawn"+i,100*i,100,"whitePawn")
       );
       this.boardPieces.push(
-        new Piece("blackPawn"+i,100*i,600,"blackPawn",1)
+        new Piece("blackPawn"+i,100*i,600,"blackPawn")
       );
     }
   } // new game
@@ -46,6 +46,7 @@ function AllPieces(){
       this.boardPieces.push(
         new Piece(newId, data.x, data.y, data.type, 1));
   }
+
   this.castle = function(data){
 
   }
@@ -60,6 +61,7 @@ function AllPieces(){
     });
     return tempReturn;
   }
+
   this.setById = function(id, x, y){
     var index = 0;
     while(index < this.boardPieces.length){
@@ -98,29 +100,9 @@ function AllPieces(){
       index++;
     }
     if(found) this.boardPieces.splice(index,1);
-    console.log("Hey" , found);
+    // console.log("Hey" , found);
     return found;
   }
-
-  this.stack = function(currPiece){
-    // var idOfDead = null
-    for(var i = 0; i < this.boardPieces.length;i++){
-      if((currPiece.x === this.boardPieces[i].x) &&    //same column
-         (currPiece.y === this.boardPieces[i].y) &&    //same row
-         (currPiece.id != this.boardPieces[i].id) &&   //not same id (isnt itself)
-         (currPiece.type === this.boardPieces[i].type) &&     //IS the same type
-         (currPiece.side() === this.boardPieces[i].side() )){ //IS on the same side white/black
-            this.boardPieces[i].count = this.boardPieces[i].count + currPiece.count;
-            return this.removeById(currPiece.id);
-            // idOfDead = this.removeById(currPiece.id);
-            // console.log("Inside loop",idOfDead)
-      }
-
-    }
-    // console.log("idOfDead in stack", idOfDead)
-    // return idOfDead;
-  }
-
 
 
   this.take = function(currPiece){
@@ -133,9 +115,6 @@ function AllPieces(){
             this.boardPieces[i].x = this.boardPieces[i].graveX;
             this.boardPieces[i].y = this.boardPieces[i].graveY;
             var square =this.getSquare(this.boardPieces[i].x,this.boardPieces[i].y);
-            console.log("getSquare", square);
-            return this.stack(square);
-            // allPieces.stack(currPiece);
       }
     }
   }//end take

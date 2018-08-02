@@ -2,32 +2,29 @@ function allPieces(){
   this.boardPieces = [];
 
 //call to update from server
-  this.createOrUpdate = function(id, x, y, type, count){
+  this.createOrUpdate = function(id, x, y, type){
     var tempPiece = this.getById(id);
     if(tempPiece == null){
-      tempPiece = new Piece(id, x, y, type, count);
+      tempPiece = new Piece(id, x, y, type);
       this.boardPieces.push(tempPiece);
-      console.log("Create Piece ID", id);
+      // console.log("Create Piece ID", id);
     } else {
       tempPiece.x = x;
       tempPiece.y = y;
-      tempPiece.count = count;
+      // tempPiece.count = count;
     }
   }
 
 
   this.getSquare = function(x , y){
-    for(var i = 0; i < this.boardPieces.length;i++){
+    for(var i = 0; i < this.boardPieces.length; i++){
         if((x === this.boardPieces[i].x) && (y === this.boardPieces[i].y)){
             return this.boardPieces[i];
           }
     }
             return null;
   }
-  // this.setNewPiece = function(data){
-  //     this.boardPieces.push(
-  //       new Piece(data.id, data.x, data.y, data.type, 1));
-  // }
+
 
 
   this.getClicked = function(){
@@ -37,28 +34,6 @@ function allPieces(){
         tempReturn = piece;
       }
     });
-
-    //if clicked has more than one count, then create new piece
-    if(tempReturn && tempReturn.count > 1){
-      //create new piece with unique id at cursor
-      var newId = tempReturn.id;
-      while(allPieces.getById(newId) != null){
-        newId = newId + "#";
-      }
-      // tempReturn.count--;
-      //
-      var data = {
-        id: tempReturn.id,
-        newId: newId
-      };
-      socket.emit('unStackEvent', data);
-      tempReturn = null;
-
-      // tempReturn = new Piece(newId, tempReturn.x, tempReturn.y, tempReturn.type, 1);
-      // allPieces.boardPieces.push(tempReturn);
-
-
-    } // end create new Piece at cursor
 
     return tempReturn;
   }
@@ -98,9 +73,9 @@ function allPieces(){
   }
 
   this.update = function(){
-    // this.boardPieces.forEach((piece)=>{
-    //   piece.update();
-    // });
+    this.boardPieces.forEach((piece)=>{
+      piece.update();
+    });
   }
 
 

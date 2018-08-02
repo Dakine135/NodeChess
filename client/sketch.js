@@ -42,15 +42,8 @@ function setup(){
     currPiece = allPieces.getById(data);
   });
 
-  // socket.on('snap',(data)=>{
-  //       var movingPiece = allPieces.getById(data.id);
-  //       movingPiece.x = data.x;
-  //       movingPiece.y = data.y;
-  //       console.log("snap at", data);
-  // });
-
   socket.on('boardState', (boardData) => {
-    console.log("boardStateUpdate: ", boardData);
+    // console.log("boardStateUpdate: ", boardData);
 
     boardData.board.forEach((serverPiece)=>{
       allPieces.createOrUpdate(serverPiece.id, serverPiece.x, serverPiece.y,
@@ -66,7 +59,7 @@ function setup(){
 //triggers in frame mouse was pressed
 function mousePressed() {
     currPiece = allPieces.getClicked();
-    console.log("Piece that was clicked:", currPiece);
+    // console.log("Piece that was clicked:", currPiece);
 }
 
 //triggers when you let go of mouse

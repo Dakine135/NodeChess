@@ -24,8 +24,9 @@ function drawBackground() {
 
 //runs once at the beggining
 function setup(){
-  createCanvas(1101,801);
+  var canvas = createCanvas(1101,801);
   frameRate(30);
+  canvas.parent('MainCanvas');
   allPieces = new allPieces();
   // allPieces.newGame();
   socket = io();
@@ -55,6 +56,10 @@ function setup(){
   });
 
 } //end setup
+
+function startNewGame(){
+  socket.emit("resetBoard");
+}
 
 //triggers in frame mouse was pressed
 function mousePressed() {

@@ -34,6 +34,7 @@ function AllPieces(){
       );
     }
   } // new game
+
   this.getSquare = function(x, y){
     for(var i = 0; i < this.boardPieces.length;i++){
         if((x === this.boardPieces[i].x) && (y === this.boardPieces[i].y)){
@@ -42,6 +43,7 @@ function AllPieces(){
     }
             return null;
   }
+  
   this.setNewPiece = function(newId, data){
       this.boardPieces.push(
         new Piece(newId, data.x, data.y, data.type, 1));

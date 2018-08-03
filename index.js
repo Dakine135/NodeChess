@@ -50,6 +50,15 @@ io.on('connection', function(socket){
     socket.broadcast.emit('pieceMovingUpdate', data);
   });
 
+  socket.on('resetBoard', function(){
+    console.log("resetBoard called");
+    board.newGame();
+    let gameState = {
+      'board': board.boardPieces
+    }
+    io.sockets.emit('boardState', gameState);
+  });
+
 
   // socket.on('mousePressedListener', function(data){
   //   socket.broadcast.emit('mousePressedEvent', data);
